@@ -1,0 +1,9 @@
+{
+	"name": "JSGraph",
+	"description": "JavaScript Graph",
+	"version": "0.1",
+	"author": "Kurt Eldridge <kilofoxtrotechod@gmail.com>",
+	"repository": "git://github.com/truk/JSGraph",
+	"main": "./lib/graph.js",
+	"engines": { "node": ">= 0.6" }
+}
