@@ -5,5 +5,9 @@
 	"author": "Kurt Eldridge <kilofoxtrotechod@gmail.com>",
 	"repository": "git://github.com/truk/JSGraph",
 	"main": "./lib/graph.js",
+	"devDependencies": {
+		"mocha": "*",
+		"should": "*"
+	},
 	"engines": { "node": ">= 0.6" }
 }
