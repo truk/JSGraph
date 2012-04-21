@@ -9,7 +9,7 @@ describe('Graph', function(){
 	})
 	
 	describe('.createNode()', function(){
-		it('should create a node with key "K"', function(){
+		it('should create a node', function(){
 			graph.createNode("K","").key.should.equal("K");
 		})
 	})
@@ -21,9 +21,11 @@ describe('Graph', function(){
 			graph.getNode("K").should.equal(node);
 		})
 		
-		it('should not add a node whose key already exists', function(){
-			graph.addNode(graph.createNode("K",""));
-			graph.addNode(graph.createNode("K","")).should.be.false;
+		describe('when a node with this key already exists', function(){
+			it('should not add the node', function(){
+				graph.addNode(graph.createNode("K",""));
+				graph.addNode(graph.createNode("K","")).should.be.false;
+			})
 		})
 	})
 
@@ -33,29 +35,64 @@ describe('Graph', function(){
 			graph.addNode(graph.createNode("N2",""));
 			graph.createEdge("E","N1","N2","").key.should.equal("E");
 		})
-		
-		it('should return false if the target or source is undefined', function(){
-			graph.createEdge("E","N1","N2","").should.be.false;
-			graph.addNode(graph.createNode("N1",""));
-			graph.createEdge("E","N1","N2","").should.be.false;
-			graph.createEdge("E","N2","N1","").should.be.false;
-		})
 	})
 	
 	describe('.addEdge()', function(){
-		it('should add an edge to the graph', function(){
+		beforeEach(function(){
 			graph.addNode(graph.createNode("N1",""));
 			graph.addNode(graph.createNode("N2",""));
+		})
+		
+		it('should add an edge to the graph', function(){
 			var edge = graph.createEdge("E","N1","N2","");
 			graph.addEdge(edge).should.equal(edge);
 		})
 		
-		it('should not add an edge if the edge key already exists', function(){
+		describe('when the edge already exists', function(){
+			it('should not add the edge', function(){
+				var edge = graph.createEdge("E","N1","N2","");
+				graph.addEdge(edge);
+				graph.addEdge(edge).should.be.false;
+			})
+		})
+		
+		describe('when the source or target node do not exist', function(){
+			it('should not add the edge', function(){
+				graph.addEdge(graph.createEdge("E","N3","N4","")).should.be.false;
+				graph.addEdge(graph.createEdge("E","N1","N3","")).should.be.false;
+				graph.addEdge(graph.createEdge("E","N3","N1","")).should.be.false;
+			})			
+		})
+	})
+	
+	describe('.removeNode()', function(){
+		beforeEach(function(){
 			graph.addNode(graph.createNode("N1",""));
 			graph.addNode(graph.createNode("N2",""));
-			var edge = graph.createEdge("E","N1","N2","");
-			graph.addEdge(edge);
-			graph.addEdge(edge).should.be.false;
+			graph.addEdge(graph.createEdge("E1","N1","N2",""));
+			graph.addNode(graph.createNode("N3",""));
+		})
+		
+		describe('when the node does not exist', function(){
+			it('should return false', function(){
+				graph.removeNode("NonExistantNode").should.be.false;
+			})
+		})
+		
+		describe('when the node has no edges', function(){
+			it('should remove only the node', function(){
+				graph.removeNode("N3").should.be.true;
+				graph.getNode("N3").should.be.false;
+				graph.getEdge("E1").should.not.be.false;
+			})
+		})
+		
+		describe('when the node has one or more edges', function(){
+			it('should remove the node and its edges', function(){
+				graph.removeNode("N1").should.be.true;
+				graph.getNode("N1").should.be.false;
+				graph.getEdge("E1").should.be.false;
+			})
 		})
 	})
 	
